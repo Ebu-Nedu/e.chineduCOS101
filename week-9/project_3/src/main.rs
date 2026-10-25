@@ -1,71 +1,47 @@
-/*ALGO
 
-1. Start.
-2. Declare and initialize three vectors: commissioners, ministries, and zones.
-3. Declare an empty vector called merged.
-4. Initialize i = 0.
-5. While i is less than the number of commissioners:\
-   a. Combine the commissioner, ministry, and zone at index i into one record.\
-   b. Add the record to merged.\
-   c. Increment i by 1.
-6. Create a file named EFCC_Merged.csv.
-7. Write the column headings Commissioner, Ministry, and Zone to the file.
-8. Write each record in merged to the file, one record per line.
-9. Display a success message.
-10. Stop.*/
-
-
-use std::fs::File;
+use std::fs;
 use std::io::Write;
 
 fn main() {
-    let commissioners = vec![
-        "Aigbogun Akanbi Daudu",
-        "Murtala Afeez Bendu",
-        "Olorochia Callistus Ogbonna",
-        "Adewale Jimoh Akanbi",
-        "Chizuwa Faith Ebiye",
-    ];
+    let file1 = fs::read_to_string("Commissioner.csv").unwrap();
+    let mut commissioners = Vec::new();
 
-    let ministries = vec![
-        "Internal Affairs",
-        "Justice",
-        "Defense",
-        "Power & Steel",
-        "Petroleum",
-    ];
+    for line in file1.lines() {
+        commissioners.push(line.trim_end_matches(',').to_string());
+    }
 
-    let zones = vec![
-        "South West",
-        "North East",
-        "South South",
-        "South West",
-        "South East",
-    ];
+    let file2 = fs::read_to_string("Ministry.csv").unwrap();
+    let mut ministry = Vec::new();
+
+    for line in file2.lines() {
+        ministry.push(line.trim_end_matches(',').to_string());
+    }
+
+    let file3 = fs::read_to_string("Zone.csv").unwrap();
+    let mut zone = Vec::new();
+
+    for line in file3.lines() {
+        zone.push(line.trim_end_matches(',').to_string());
+    }
 
     let mut merged = Vec::new();
 
     for i in 0..commissioners.len() {
-        let record = format!(
-            "{},{},{}",
-            commissioners[i],
-            ministries[i],
-            zones[i]
-        );
+        let record = commissioners[i].to_string()
+            + ","
+            + &ministry[i]
+            + ","
+            + &zone[i]
+            + "\n";
 
         merged.push(record);
     }
 
-    let mut file = File::create("EFCC_Merged.csv")
-        .expect("Failed to create CSV file");
-
-    writeln!(file, "Commissioner,Ministry,Zone")
-        .expect("Failed to write header");
+    let mut file = fs::File::create("EFCC_Merged.csv").unwrap();
 
     for record in &merged {
-        writeln!(file, "{}", record)
-            .expect("Failed to write record");
+        file.write_all(record.as_bytes()).unwrap();
     }
 
-    println!("Records successfully merged into EFCC_Merged.csv");
+    println!("Records successfully merged!");
 }
