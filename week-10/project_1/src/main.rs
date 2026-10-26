@@ -58,13 +58,13 @@ fn main() {
     let lappy_3 = Lappy {
         brand : "Toshiba".to_string(),
         quantity : 3,
-        price : 350000,
+        price : 550000,
     };
 
     let lappy_4 = Lappy {
         brand : "Dell".to_string(),
         quantity : 3,
-        price : 350000,
+        price : 850000,
     };
 
     let total_cost = lappy_1.cost() + lappy_2.cost() + lappy_3.cost() + lappy_4.cost();
